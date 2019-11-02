@@ -4,14 +4,14 @@ import matplotlib.pyplot as plt
 # Calculates the force exerted on particle i
 def lennard_jones_force(i):
     global xs
-    sigma = 1e-1
-    epsilon = 1e-1
+    sigma = 0.1
+    epsilon = 1
     F_net = np.zeros(2)
     for j in range(len(xs)):
         if (i != j):
             r = np.sqrt(np.sum((xs[j] - xs[i])**2)) # Calculate distance
             R = (xs[j] - xs[i]) / r # Normalized direction vector
-            F = 24*pow(sigma, 6)*epsilon*(pow(r, 6) - 2*pow(sigma, 6)) / (pow(r, 13) + 1e-10)
+            F = -24*pow(sigma, 6)*epsilon*(pow(r, 6) - 2*pow(sigma, 6)) / (pow(r, 13) + 1e-10)
             F_net += F*R
     return F_net
 
@@ -35,7 +35,6 @@ def initialize(n):
     ax = fig.add_subplot(111)
     fig.show()
     fig.canvas.draw()
-
     # Initialize particle positions
     global xs, xs_prev
     xs = np.random.rand(n, 2)
@@ -51,7 +50,7 @@ def update():
     for i in range(len(xs)):
         verlet_integrate(i)
 
-initialize(n = 30)
-for t in range(100):
+initialize(n = 50)
+for t in range(1000):
     observe()
     update()
