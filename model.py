@@ -2,8 +2,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 from scipy.stats import kde
 
-m = 1
-A, B = 1, 1 #1e6, 1e7
+m = 1 # Mass of each particle
+A, B = 1, 1
 
 # Calculates the force exerted on particle i
 def lennard_jones_force(i):
@@ -17,18 +17,24 @@ def lennard_jones_force(i):
             F_net += F*R
     return F_net
 
-# verlet integrates particle i
-def verlet_integrate(i):
+# performs the first step of leapfrog integration for particle i
+def leapfrog_integrate_1(i):
     global xs, vs, dt, m
     a = (1/m) * lennard_jones_force(i)
-    vs[i] += a * dt
+    vs[i] += (a / 2) * dt
     xs[i] += vs[i] * dt
+
+# performs the second step of leapfrog integration for particle i
+def leapfrog_integrate_2(i):
+    global xs, vs, dt, m
+    a = (1/m) * lennard_jones_force(i)
+    vs[i] += (a / 2) * dt
 
 # Initializes a model with n particles
 def initialize(n):
     # Initialize pyplot stuff
     global fig, ax, box_size
-    box_size = 10
+    box_size = 100
     #plt.xlim(-2, 200)
     #plt.ylim(-2, 20)
     fig = plt.figure()
@@ -59,7 +65,8 @@ def observe():
 
 def update():
     for i in range(len(xs)):
-        verlet_integrate(i)
+        leapfrog_integrate_1(i)
+        leapfrog_integrate_2(i)
 
 def compute_total_energy():
     global xs, vs, A, B, g
@@ -76,9 +83,9 @@ def compute_total_energy():
                 total_potential += V
     return (total_potential/2 + total_kinetic)
 
-dt = 0.01
+dt = 0.1
 initialize(n = 4)
 for t in range(10000):
     observe()
     update()
-    print(compute_total_energy()
+    print(compute_total_energy())
