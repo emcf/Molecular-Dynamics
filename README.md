@@ -1,1 +1,1 @@
-# Modelling Final Project Codebase
+A brute-force molecular dynamics simulation that uses [Leapfrog integration](https://en.wikipedia.org/wiki/Leapfrog_integration) to apply the [Lennard-Jones potential](https://en.wikipedia.org/wiki/Lennard-Jones_potential). The codebase allows for 2D and 3D simulation.
